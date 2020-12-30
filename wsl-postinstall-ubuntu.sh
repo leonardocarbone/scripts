@@ -12,6 +12,7 @@ install_packages() {
     sudo apt install -y libcurl4-gnutls-dev 
     sudo apt install -y libxml2-dev 
     sudo apt install -y libssl-dev
+	sudo apt install -y zlib1g-dev
 }
 
 install_asdf() {
