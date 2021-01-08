@@ -1,0 +1,120 @@
+#!/bin/bash
+
+usage()
+{
+	echo "Usage: bash ubuntu-postinstall [ hyperv | wsl ]"
+	
+	exit 2
+}
+
+
+install_asdf()
+{
+
+    ASDF_VERSION="v0.7.7"
+    ASDF_RUBY_VERSION="2.7.0"
+	ASDF_PYTHON_VERSION="3.9.1"
+    ASDF_NODEJS_VERSION="13.10.1"
+    ASDF_DOTNETCORE_VERSION="3.1.102"
+
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch $ASDF_VERSION
+    echo -e '\n. $HOME/.asdf/asdf.sh' >> ~/.bashrc
+    echo -e '\n. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc
+    . $HOME/.asdf/asdf.sh
+    . $HOME/.asdf/completions/asdf.bash
+
+    asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+    asdf install ruby $ASDF_RUBY_VERSION
+    asdf global ruby $ASDF_RUBY_VERSION
+	
+	asdf plugin-add python
+	asdf install python $ASDF_PYTHON_VERSION
+	asdf global python $ASDF_PYTHON_VERSION
+
+    asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+    bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+    asdf install nodejs $ASDF_NODEJS_VERSION
+    asdf global nodejs $ASDF_NODEJS_VERSION
+    npm i -g npm
+
+    asdf plugin-add dotnet-core https://github.com/emersonsoares/asdf-dotnet-core.git
+    asdf install dotnet-core $ASDF_DOTNETCORE_VERSION
+    asdf global dotnet-core $ASDF_DOTNETCORE_VERSION
+}
+
+install_aws()
+{
+
+    clear
+    read -p "Install AWS CLI & CDK. Press ENTER to continue"
+
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    sudo ./aws/install
+    echo -e '\nexport AWS_DEFAULT_REGION=eu-west-1' >> ~/.bashrc
+    source ~/.bashrc
+
+    rm -rf aws
+    rm awscliv2.zip
+
+    npm install -g aws-cdk
+}
+
+install_ansible()
+{
+	sudo apt install software-properties-common
+	sudo apt-add-repository --yes --update ppa:ansible/ansible
+	sudo apt install ansible
+}
+
+create_symlink()
+{
+	ln -s /mnt/d/Dropbox/Dev $HOME/dev
+}
+
+install_packages()
+{ 
+    sudo apt update -y
+	sudo apt upgrade -y	
+
+    sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev
+}
+
+install_packages_hyperv()
+{
+	install_packages
+	
+	sudo apt install -y openssh-server
+	sudo apt install -y "linux-cloud-tools-$(uname -r)"
+	
+	install_asdf
+	install_aws
+	install_ansible
+}
+
+install_packages_wsl()
+{
+	install_packages
+	install_asdf
+	install_aws
+	install_ansible
+}
+
+if [ "$1" = "hyperv" ]; then
+	install_packages_hyperv
+elif [ "$1" = "wsl" ]; then
+	install_packages_wsl
+	create_symlink
+else
+   usage
+fi
+
+clear
+echo "Ruby Version........: `ruby --version`"
+echo "Python Version......: `python -V`"
+echo "Node Version........: `node --version`"
+echo "DotNetCore Version..: `dotnet --version`"
+echo "AWS CLI Version.....: `aws --version`"
+echo "AWS CDK Version.....: `cdk --version`"
+
+
