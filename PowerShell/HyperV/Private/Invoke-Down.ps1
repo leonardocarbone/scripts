@@ -60,15 +60,30 @@ $Configuration.vms | ForEach-Object {
     Invoke-StopVM -Name $_.name
 
     if ($Terminate.IsPresent) {
-        #Confirmar exclusao da VM - Mensagem dizendo que vai excluir tudo
-        Write-Host "[$($_.name)] Terminating VM"
+        
+        Write-Host "[$($_.name)] Terminate VM, CONFIRM ? (y/n)"
+        while ($true) {
+        
+            [byte]$KeyCode = Get-KeyCode
+        
+            # Exit when ESC or 'n/N'
+            if ($KeyCode -eq 27 -or $KeyCode -eq 78) {
+                $StoppedVMs += @{ name = $_.name; state = $VM.state }
+                return
+            }
+        
+            # Continue when 'y/Y'`
+            if ($KeyCode -eq 89) { break }
+        }        
+
+
+        Write-Host "[$($_.name)] Terminating"
         Invoke-TerminateVM -Name $_.name
 
         $StoppedVMs += @{ name = $_.name; state = "Terminated" }
     } else {
-        $StoppedVMs += @{ name = $_.name; state = $_.state }
+        $StoppedVMs += @{ name = $_.name; state = $VM.state }
     }
-
     
     Write-Host " "
 }

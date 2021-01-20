@@ -177,7 +177,7 @@ function Wait-ForVMIPAddresses {
         return $null
     }
     
-    Write-Host "Done!" 
+    Write-Host "Created!" 
 }
 
 $CreatedVMs = @()
@@ -243,10 +243,9 @@ $Configuration.vms | ForEach-Object {
         Write-Host "[$($_.name)] Starting -> Skipped!!!"
         Write-Host "[$($_.name)] Waiting for network -> Skipped!!!"
     }
-    
-    #Write-Host "[$($_.name)] VM up and running!!!"
 
-    $CreatedVMs += $VM
+    $CreatedVMs += @{ name = $VM.name; state = $VM.state; memory_demand = $VM.MemoryDemand; memory_assigned = $VM.MemoryAssigned; ips = $VM.NetworkAdapters.IPAddresses }
+    
     Write-Host " "
 }
 
@@ -255,11 +254,11 @@ Write-Host " "
 Write-Host "     ******************* SUMMARY *******************"
 $CreatedVMs | ForEach-Object { 
     Write-Host " "
-    Write-Host "Name            : $($_.Name)"
-    Write-Host "State           : $($_.State)"
-    Write-Host "MemoryDemand    : $($_.MemoryDemand)"
-    Write-Host "MemoryAssigned  : $($_.MemoryAssigned)"
-    Write-Host "IPAddresses     : $($_.NetworkAdapters.IPAddresses)"
+    Write-Host "Name            : $($_.name)"
+    Write-Host "State           : $($_.state)"
+    Write-Host "MemoryDemand    : $($_.memory_demand)"
+    Write-Host "MemoryAssigned  : $($_.memory_assigned)"
+    Write-Host "IPAddresses     : $($_.ips)"
     Write-Host " "
     Write-Host " => Connect using RDP, SSH or by typing 'vmconnect $($env:COMPUTERNAME) $($_.Name)'"
     Write-Host "---------- "

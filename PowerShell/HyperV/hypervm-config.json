@@ -10,7 +10,7 @@
       {
         "name":"NewVMTest",
         "enable_checkpoint": false,
-        "enable":true
+        "enable":false
       },
       {
         "name":"NewVMTest-2",
