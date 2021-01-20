@@ -177,7 +177,7 @@ function Wait-ForVMIPAddresses {
         return $null
     }
     
-    Write-Host "Created!" 
+    Write-Host "Done!" 
 }
 
 $CreatedVMs = @()
@@ -227,7 +227,7 @@ $Configuration.vms | ForEach-Object {
             return
         }
         else {
-            Write-Host "[$($_.name)] Done!!!"
+            Write-Host "[$($_.name)] Created!!!"
         }
     } else {
         Write-Host "[$($_.name)] VM Found!"
