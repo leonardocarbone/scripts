@@ -1,25 +1,16 @@
 {
     "templates": [
       {
-        "name":"ubuntu",
+        "name":"ubuntu20.4",
         "file_path":"D:\\ProgramData\\HyperV\\Templates\\UbuntuServer20.04-2021.Base.vhdx"
       }
     ],
     
     "vms": [
       {
-        "name":"NewVMTest",
+        "name":"ubuntu20.4-ansible-test",
         "enable_checkpoint": false,
-        "enable":false
-      },
-      {
-        "name":"NewVMTest-2",
-        "enable_checkpoint": false,
-        "from_template":"ubuntu",
-        "enable":false
-      },
-    {
-      "name":"AnsibleTestEnvironment",
-      "enable":true
-    }]
+        "from_template":"ubuntu20.4",
+        "enable":true
+      }]
   }
