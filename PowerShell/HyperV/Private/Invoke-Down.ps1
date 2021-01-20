@@ -10,7 +10,7 @@ function Invoke-StopVM {
     )
 
     Stop-VM $Name -AsJob | Out-Null            
-    Write-Host "     Please Wait.." -NoNewline    
+    Write-Host "     Please Wait.." -NoNewline
 
     do {
         $VM = Get-VM $Name
@@ -18,6 +18,22 @@ function Invoke-StopVM {
         Start-Sleep 1
     } until ($VM.State -eq "Off")
     
+    Write-Host "Done!"
+}
+
+function Invoke-TerminateVM {
+
+    param (
+        [ValidateNotNullOrEmpty()]
+        [string]$Name=$(throw "Parameter Required: [Name]")
+    )
+
+    Write-Host "     Please Wait.." -NoNewline
+
+    $VHDPath = (Get-VM $Name | Select-Object -Property VMId | Get-VHD).Path
+    Remove-VM $Name -Force
+    Remove-Item -Path $VHDPath -Force
+
     Write-Host "Done!"
 }
 
@@ -44,10 +60,16 @@ $Configuration.vms | ForEach-Object {
     Invoke-StopVM -Name $_.name
 
     if ($Terminate.IsPresent) {
-        
+        #Confirmar exclusao da VM - Mensagem dizendo que vai excluir tudo
+        Write-Host "[$($_.name)] Terminating VM"
+        Invoke-TerminateVM -Name $_.name
+
+        $StoppedVMs += @{ name = $_.name; state = "Terminated" }
+    } else {
+        $StoppedVMs += @{ name = $_.name; state = $_.state }
     }
 
-    $StoppedVMs += $VM
+    
     Write-Host " "
 }
 
@@ -56,8 +78,8 @@ Write-Host " "
 Write-Host "     ******************* SUMMARY *******************"
 $StoppedVMs | ForEach-Object {
     Write-Host " "
-    Write-Host "Name   : $($_.Name)"
-    Write-Host "State  : $($_.State)"
+    Write-Host "Name   : $($_.name)"
+    Write-Host "State  : $($_.state)"
 }
 Write-Host " "
 Write-Host " "
