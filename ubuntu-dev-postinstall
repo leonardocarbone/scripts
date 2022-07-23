@@ -131,6 +131,17 @@ configure_awsvault()
 	aws-vault --backend=pass add $aws_profile_name
 }
 
+configure_github_key()
+{
+	echo " "
+	read -p "Configure GitHub Key. Press ENTER to continue"
+	
+	ssh-keygen -t ed25519 -C "githubkey" -f $HOME/.ssh/github_ed25519
+	
+	echo -e '\neval "$(ssh-agent -s)"'  >> ~/.bashrc
+	echo -e 'ssh-add $HOME/.ssh/github_ed25519'  >> ~/.bashrc	
+}
+
 create_symlink()
 {
 	ln -s /mnt/d/Dropbox/Dev $HOME/dev
@@ -164,6 +175,7 @@ install_packages_wsl()
 	install_ohmyposh
 	#install_ansible
 	configure_awsvault
+	configure_github_key
 }
 
 clear
