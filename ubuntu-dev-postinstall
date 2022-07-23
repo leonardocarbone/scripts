@@ -10,12 +10,17 @@ usage()
 
 install_asdf()
 {
+	echo " "
+    read -p "Install ASDF & Plugins. Press ENTER to continue"
 
-    ASDF_VERSION="v0.7.7"
-    ASDF_RUBY_VERSION="2.7.0"
-	ASDF_PYTHON_VERSION="3.9.1"
-    ASDF_NODEJS_VERSION="13.10.1"
-    ASDF_DOTNETCORE_VERSION="3.1.102"
+    ASDF_VERSION="v0.10.2"
+    ASDF_RUBY_VERSION="2.7.6"
+	ASDF_PYTHON_VERSION="3.7.3"
+    ASDF_NODEJS_VERSION="16.3.0"
+    ASDF_DOTNETCORE_VERSION="6.0.302"
+	ASDF_TERRAFORM_VERSION="1.1.9"
+	ASDF_AWS_VAULT_VERSION="6.6.0"
+	
 
     git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch $ASDF_VERSION
     echo -e '\n. $HOME/.asdf/asdf.sh' >> ~/.bashrc
@@ -32,7 +37,6 @@ install_asdf()
 	asdf global python $ASDF_PYTHON_VERSION
 
     asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-    bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
     asdf install nodejs $ASDF_NODEJS_VERSION
     asdf global nodejs $ASDF_NODEJS_VERSION
     npm i -g npm
@@ -40,19 +44,27 @@ install_asdf()
     asdf plugin-add dotnet-core https://github.com/emersonsoares/asdf-dotnet-core.git
     asdf install dotnet-core $ASDF_DOTNETCORE_VERSION
     asdf global dotnet-core $ASDF_DOTNETCORE_VERSION
+	
+	asdf plugin-add terraform https://github.com/asdf-community/asdf-hashicorp.git
+	asdf install terraform $ASDF_TERRAFORM_VERSION
+	asdf global terraform $ASDF_TERRAFORM_VERSION
+	
+	asdf plugin-add aws-vault https://github.com/karancode/asdf-aws-vault.git
+	asdf install aws-vault $ASDF_AWS_VAULT_VERSION
+	asdf global aws-vault $ASDF_AWS_VAULT_VERSION	
 }
 
 install_aws()
 {
-
-    clear
+	echo " "
     read -p "Install AWS CLI & CDK. Press ENTER to continue"
 
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
     sudo ./aws/install
-    echo -e '\nexport AWS_DEFAULT_REGION=eu-west-1' >> ~/.bashrc
-    source ~/.bashrc
+	mkdir ~/.aws/
+    #echo -e '\nexport AWS_DEFAULT_REGION=eu-west-1' >> ~/.bashrc
+    #source ~/.bashrc
 
     rm -rf aws
     rm awscliv2.zip
@@ -62,9 +74,44 @@ install_aws()
 
 install_ansible()
 {
+	echo " "
+    read -p "Install ANSIBLE. Press ENTER to continue"
+	
 	sudo apt install software-properties-common
 	sudo apt-add-repository --yes --update ppa:ansible/ansible
 	sudo apt install ansible
+}
+
+configure_awsvault()
+{
+	echo " "
+	read -p "Configure AWS-Vault. Press ENTER to continue"
+	
+	read -p "AWS Region: " aws_region
+	read -p "AWS Profile Name: " aws_profile_name	
+	read -p "AWS MFA Serial: " aws_mfa_serial
+	read -p "AWS Role ARN: " aws_role_arn
+	
+	
+	CONFIG_FILE=~/.aws/config
+	if [ -f "$CONFIG_FILE" ]; then
+		rm $CONFIG_FILE
+	fi
+	
+	echo -e "[profile $aws_profile_name]\nregion = $aws_region\nmfa_serial = $aws_mfa_serial\nrole_arn = $aws_role_arn" >> $CONFIG_FILE
+	
+	echo -e '\nexport AWS_VAULT_BACKEND=pass' >> ~/.bashrc
+	echo -e "\nalias aws-login='aws-vault exec $aws_profile_name'"  >> ~/.bashrc
+	
+	echo " "
+	gpg --full-generate-key
+	
+	echo " "
+	read -p "Enter gpg-id above:" gpgid
+	pass init $gpgid
+	
+	echo " "
+	aws-vault --backend=pass add $aws_profile_name
 }
 
 create_symlink()
@@ -77,7 +124,7 @@ install_packages()
     sudo apt update -y
 	sudo apt upgrade -y	
 
-    sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev
+    sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg
 }
 
 install_packages_hyperv()
@@ -97,24 +144,29 @@ install_packages_wsl()
 	install_packages
 	install_asdf
 	install_aws
-	install_ansible
+	#install_ansible
+	configure_awsvault
 }
 
+clear
 if [ "$1" = "hyperv" ]; then
 	install_packages_hyperv
 elif [ "$1" = "wsl" ]; then
 	install_packages_wsl
-	create_symlink
+	#create_symlink
 else
    usage
 fi
 
-clear
+echo " "
 echo "Ruby Version........: `ruby --version`"
 echo "Python Version......: `python -V`"
 echo "Node Version........: `node --version`"
 echo "DotNetCore Version..: `dotnet --version`"
+echo "Terraform Version...: `terraform --version`"
+echo "AWS Vault Version...: `aws-vault --version`"
 echo "AWS CLI Version.....: `aws --version`"
 echo "AWS CDK Version.....: `cdk --version`"
-
-
+echo " "
+	
+exec bash	
