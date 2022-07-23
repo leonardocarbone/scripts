@@ -82,6 +82,23 @@ install_ansible()
 	sudo apt install ansible
 }
 
+install_ohmyposh()
+{
+	echo " "
+	read -p "Install OH-MY-POSH. Press ENTER to continue"
+	
+	sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+	sudo chmod +x /usr/local/bin/oh-my-posh
+	
+	mkdir ~/.poshthemes
+	wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+	unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+	chmod u+rw ~/.poshthemes/*.omp.*
+	rm ~/.poshthemes/themes.zip
+	
+	echo -e '\neval "$(oh-my-posh init bash --config $HOME/.poshthemes/agnosterplus.omp.json)"' >> ~/.bashrc
+}
+
 configure_awsvault()
 {
 	echo " "
@@ -144,6 +161,7 @@ install_packages_wsl()
 	install_packages
 	install_asdf
 	install_aws
+	install_ohmyposh
 	#install_ansible
 	configure_awsvault
 }
