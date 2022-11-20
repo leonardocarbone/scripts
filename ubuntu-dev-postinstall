@@ -124,7 +124,7 @@ configure_awsvault()
 	gpg --full-generate-key
 	
 	echo " "
-	read -p "Enter gpg-id above:" gpgid
+	read -p "Enter gpg-key above:" gpgid
 	pass init $gpgid
 	
 	echo " "
@@ -182,6 +182,7 @@ clear
 if [ "$1" = "hyperv" ]; then
 	install_packages_hyperv
 elif [ "$1" = "wsl" ]; then
+	echo -e 'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null' >>  ~/.bashrc
 	install_packages_wsl
 	#create_symlink
 else
