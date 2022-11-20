@@ -1,4 +1,4 @@
-# Set-ExecutionPolicy Bypass -Scope Process -Force; 
+# Set-ExecutionPolicy Bypass -Scope Process -Force
 # [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 Start-Transcript -Path "install_chocolatey.log" -Force
@@ -27,5 +27,9 @@ choco install vlc
 choco install powershell-core
 choco install powertoys
 choco install git
+choco install electrum
+choco install crystaldiskinfo
+choco install crystaldiskmark
+
 
 Stop-Transcript
