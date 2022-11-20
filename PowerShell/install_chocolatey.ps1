@@ -1,5 +1,4 @@
-# Set-ExecutionPolicy Bypass -Scope Process -Force
-# [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 Start-Transcript -Path "install_chocolatey.log" -Force
 
@@ -14,7 +13,6 @@ choco install treesizefree
 choco install paint.net
 choco install steam-client
 choco install vscode
-choco install docker-desktop --ignore-package-exit-codes
 choco install postman
 choco install 7zip
 choco install dropbox
@@ -30,6 +28,9 @@ choco install git
 choco install electrum
 choco install crystaldiskinfo
 choco install crystaldiskmark
-
+choco install simple-sticky-notes
+choco install googledrive
+choco install whatsapp
+choco install docker-desktop --ignore-package-exit-codes
 
 Stop-Transcript
