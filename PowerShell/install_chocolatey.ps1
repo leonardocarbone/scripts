@@ -8,29 +8,39 @@ choco feature enable -n allowGlobalConfirmation
 
 choco install speccy --ignore-checksums --params "/UseSystemLocale"
 choco install cpu-z
-choco install speedtest-by-ookla
-choco install treesizefree
-choco install paint.net
-choco install steam-client
-choco install vscode
-choco install postman
-choco install 7zip
-choco install dropbox
-choco install firefox
-choco install foxitreader
-choco install notepadplusplus
-choco install plexmediaserver
-choco install spotify
-choco install vlc
-choco install powershell-core
-choco install powertoys
-choco install git
-choco install electrum
 choco install crystaldiskinfo
 choco install crystaldiskmark
-choco install simple-sticky-notes
-choco install googledrive
+choco install hwinfo
+choco install treesizefree
+choco install 7zip
+
+choco install powertoys
+choco install speedtest-by-ookla
+choco install foxitreader
+choco install firefox
+
+choco install starship ### cross-shell prompt
+choco install git
+choco install powershell-core
+choco install vscode
+choco install postman
+choco install notepadplusplus
+
 choco install whatsapp
+choco install slack
+
+# choco install dropbox
+choco install googledrive
+
+choco install spotify
+choco install plexmediaserver
+choco install vlc
+
+choco install electrum
+choco install simple-sticky-notes
+choco install paint.net
+choco install steam-client
+
 choco install docker-desktop --ignore-package-exit-codes
 
 Stop-Transcript

@@ -1,24 +1,18 @@
 #!/bin/bash
 
-usage()
-{
-	echo "Usage: bash ubuntu-postinstall [ hyperv | wsl ]"
-	
-	exit 2
-}
-
 
 install_asdf()
 {
 	echo " "
     read -p "Install ASDF & Plugins. Press ENTER to continue"
 
-    ASDF_VERSION="v0.10.2"
-    ASDF_RUBY_VERSION="2.7.6"
-	ASDF_PYTHON_VERSION="3.7.3"
-    ASDF_NODEJS_VERSION="16.3.0"
-    ASDF_DOTNETCORE_VERSION="6.0.302"
-	ASDF_TERRAFORM_VERSION="1.1.9"
+	ASDF_VERSION="v0.10.2"
+    ASDF_STARSHIP_VERSION="1.11.0"
+	ASDF_RUBY_VERSION="3.1.3"
+	ASDF_PYTHON_VERSION="3.11.0"
+    ASDF_NODEJS_VERSION="17.9.1"
+    ASDF_DOTNETCORE_VERSION="6.0.403"
+	ASDF_TERRAFORM_VERSION="1.3.5"
 	ASDF_AWS_VAULT_VERSION="6.6.0"
 	
 
@@ -28,7 +22,13 @@ install_asdf()
     . $HOME/.asdf/asdf.sh
     . $HOME/.asdf/completions/asdf.bash
 
-    asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+    asdf plugin add starship
+	asdf install starship $ASDF_STARSHIP_VERSION
+	asdf global starship $ASDF_STARSHIP_VERSION
+	echo -e '\neval "$(starship init bash)"' >> ~/.bashrc
+	
+	
+	asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
     asdf install ruby $ASDF_RUBY_VERSION
     asdf global ruby $ASDF_RUBY_VERSION
 	
@@ -72,16 +72,8 @@ install_aws()
     npm install -g aws-cdk
 }
 
-install_ansible()
-{
-	echo " "
-    read -p "Install ANSIBLE. Press ENTER to continue"
-	
-	sudo apt install software-properties-common
-	sudo apt-add-repository --yes --update ppa:ansible/ansible
-	sudo apt install ansible
-}
 
+## Deprecated - Replaced with Starship
 install_ohmyposh()
 {
 	echo " "
@@ -147,47 +139,28 @@ create_symlink()
 	ln -s /mnt/d/Dropbox/Dev $HOME/dev
 }
 
+
 install_packages()
-{ 
-    sudo apt update -y
+{
+	sudo apt update -y
 	sudo apt upgrade -y	
-
-    sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg
-}
-
-install_packages_hyperv()
-{
-	install_packages
-	
-	sudo apt install -y openssh-server
-	sudo apt install -y "linux-cloud-tools-$(uname -r)"
+	sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg
 	
 	install_asdf
 	install_aws
-	install_ansible
-}
-
-install_packages_wsl()
-{
-	install_packages
-	install_asdf
-	install_aws
-	install_ohmyposh
-	#install_ansible
+	#install_ohmyposh
 	configure_awsvault
 	configure_github_key
 }
 
 clear
-if [ "$1" = "hyperv" ]; then
-	install_packages_hyperv
-elif [ "$1" = "wsl" ]; then
-	echo -e 'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null' >>  ~/.bashrc
-	install_packages_wsl
-	#create_symlink
-else
-   usage
-fi
+
+echo -e 'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null' >>  ~/.bashrc
+
+install_packages
+
+#create_symlink
+
 
 echo " "
 echo "Ruby Version........: `ruby --version`"
@@ -200,4 +173,4 @@ echo "AWS CLI Version.....: `aws --version`"
 echo "AWS CDK Version.....: `cdk --version`"
 echo " "
 	
-exec bash	
+exec bash
