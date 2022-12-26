@@ -77,7 +77,7 @@ install_ohmyposh()
 	sudo chmod +x /usr/local/bin/oh-my-posh
 	
 	mkdir ~/.poshthemes
-	wget https://github.com/leonardocarbone/dotfiles/blob/main/.oh-my-posh.json -O ~/.poshthemes/.oh-my-posh.json
+	wget https://raw.githubusercontent.com/leonardocarbone/dotfiles/main/.oh-my-posh.json -O ~/.poshthemes/.oh-my-posh.json
 	#wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
 	#unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
 	#chmod u+rw ~/.poshthemes/*.omp.*
