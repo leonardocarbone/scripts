@@ -1,5 +1,8 @@
 #!/bin/bash
 
+###
+### Tested Ubuntu 22.04
+###
 
 install_asdf()
 {
