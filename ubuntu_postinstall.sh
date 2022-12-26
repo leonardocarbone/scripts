@@ -4,7 +4,7 @@
 install_asdf()
 {
 	echo " "
-    read -p "Install ASDF & Plugins. Press ENTER to continue"
+    #read -p "Install ASDF & Plugins. Press ENTER to continue"
 
 	ASDF_VERSION="v0.10.2"
 	ASDF_RUBY_VERSION="3.1.3"
@@ -33,7 +33,7 @@ install_asdf()
     asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
     asdf install nodejs $ASDF_NODEJS_VERSION
     asdf global nodejs $ASDF_NODEJS_VERSION
-    #npm i -g npm
+    npm install -g npm@9.2.0
 
     asdf plugin-add dotnet-core https://github.com/emersonsoares/asdf-dotnet-core.git
     asdf install dotnet-core $ASDF_DOTNETCORE_VERSION
@@ -51,7 +51,7 @@ install_asdf()
 install_aws()
 {
 	echo " "
-    read -p "Install AWS CLI & CDK. Press ENTER to continue"
+    #read -p "Install AWS CLI & CDK. Press ENTER to continue"
 
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
     unzip awscliv2.zip
@@ -71,7 +71,7 @@ install_aws()
 install_ohmyposh()
 {
 	echo " "
-	read -p "Install OH-MY-POSH. Press ENTER to continue"
+	#read -p "Install OH-MY-POSH. Press ENTER to continue"
 	
 	sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
 	sudo chmod +x /usr/local/bin/oh-my-posh
@@ -83,7 +83,7 @@ install_ohmyposh()
 	#chmod u+rw ~/.poshthemes/*.omp.*
 	#rm ~/.poshthemes/themes.zip
 	
-	echo -e '\neval "$(oh-my-posh init bash --config $HOME/.poshthemes/.oh-my-posh.omp.json)"' >> ~/.bashrc
+	echo -e '\neval "$(oh-my-posh init bash --config $HOME/.poshthemes/.oh-my-posh.json)"' >> ~/.bashrc
 }
 
 configure_awsvault()
@@ -121,7 +121,7 @@ configure_awsvault()
 configure_github_key()
 {
 	echo " "
-	read -p "Configure GitHub Key. Press ENTER to continue"
+	#read -p "Configure GitHub Key. Press ENTER to continue"
 	
 	ssh-keygen -t ed25519 -C "githubkey" -f $HOME/.ssh/github_ed25519
 	
@@ -129,23 +129,17 @@ configure_github_key()
 	echo -e 'ssh-add $HOME/.ssh/github_ed25519'  >> ~/.bashrc	
 }
 
-create_symlink()
-{
-	ln -s /mnt/d/Dropbox/Dev $HOME/dev
-}
-
-
 install_packages()
 {
 	sudo apt update -y
 	sudo apt upgrade -y	
-	sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg
+	sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg libbz2-dev
 	
+	install_ohmyposh
 	install_asdf
 	install_aws	
+	configure_github_key	
 	configure_awsvault
-	configure_github_key
-	install_ohmyposh
 }
 
 clear
@@ -153,9 +147,6 @@ clear
 echo -e 'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null' >>  ~/.bashrc
 
 install_packages
-
-#create_symlink
-
 
 echo " "
 echo "Ruby Version........: `ruby --version`"
