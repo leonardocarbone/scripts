@@ -9,7 +9,7 @@ install_asdf()
 	ASDF_VERSION="v0.10.2"
 	ASDF_RUBY_VERSION="3.1.3"
 	ASDF_PYTHON_VERSION="3.11.0"
-    ASDF_NODEJS_VERSION="17.9.1"
+    ASDF_NODEJS_VERSION="18.12.1"
     ASDF_DOTNETCORE_VERSION="6.0.403"
 	ASDF_TERRAFORM_VERSION="1.3.5"
 	ASDF_AWS_VAULT_VERSION="6.6.0"
@@ -33,7 +33,7 @@ install_asdf()
     asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
     asdf install nodejs $ASDF_NODEJS_VERSION
     asdf global nodejs $ASDF_NODEJS_VERSION
-    npm i -g npm
+    #npm i -g npm
 
     asdf plugin-add dotnet-core https://github.com/emersonsoares/asdf-dotnet-core.git
     asdf install dotnet-core $ASDF_DOTNETCORE_VERSION
