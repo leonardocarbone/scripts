@@ -96,7 +96,7 @@ install_packages() {
 
 	install_ohmyposh
 	install_asdf
-	configure_awsvault
+	#configure_awsvault
 	configure_github_key
 
 	npm install -g aws-cdk
