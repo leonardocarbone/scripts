@@ -2,6 +2,7 @@
 
 ###
 ### Tested Ubuntu 20.04
+### curl -sSL https://raw.githubusercontent.com/leonardocarbone/scripts/master/ubuntu_postinstall.sh | bash
 ###
 
 install_asdf() {
