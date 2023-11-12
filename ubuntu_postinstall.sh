@@ -58,7 +58,9 @@ configure_awsvault() {
 	read -p "AWS MFA Serial: " aws_mfa_serial
 	read -p "AWS Role ARN: " aws_role_arn
 
-	CONFIG_FILE=~/.aws/config
+	mkdir -p $HOME/.aws
+ 
+	CONFIG_FILE=$HOME/.aws/config
 	if [ -f "$CONFIG_FILE" ]; then
 		rm $CONFIG_FILE
 	fi
@@ -66,7 +68,7 @@ configure_awsvault() {
 	echo -e "[profile $aws_profile_name]\nregion = $aws_region\nmfa_serial = $aws_mfa_serial\nrole_arn = $aws_role_arn" >>$CONFIG_FILE
 
 	echo -e '\nexport AWS_VAULT_BACKEND=pass' >>~/.bashrc
-	echo -e "\nalias aws-login='aws-vault exec $aws_profile_name'" >>~/.bashrc
+	echo -e "\nalias awslogin='aws-vault exec $aws_profile_name'" >>~/.bashrc
 
 	echo " "
 	gpg --full-generate-key
@@ -96,10 +98,10 @@ install_packages() {
 
 	install_ohmyposh
 	install_asdf
-	#configure_awsvault
 	configure_github_key
-
 	npm install -g aws-cdk
+
+ 	configure_awsvault
 
 }
 
@@ -109,8 +111,8 @@ clear
 
 install_packages
 
-git config --global user.email "myemail@gmail.com"
-git config --global user.name "My Name"
+git config --global user.email "leonardoz.carbone@gmail.com"
+git config --global user.name "Leonardo Carbone"
 
 asdf list
 
