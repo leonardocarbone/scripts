@@ -11,7 +11,7 @@ install_asdf() {
 
 	ASDF_VERSION="v0.13.1"
 
-	ASDF_PLUGINS=("yq" "jq" "terraform" "awscli" "aws-vault" "python" "ruby" "nodejs" "dotnet" "powershell-core")
+	ASDF_PLUGINS=("yq@4.40.1" "jq@1.7" "terraform@1.6.3" "awscli@2.13.33" "aws-vault@7.2.0" "python@3.12.0" "ruby@3.2.2" "nodejs@19.9.0" "dotnet@7.0.403" "powershell-core@7.3.9")
 
 	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch $ASDF_VERSION
 	echo -e '\n. $HOME/.asdf/asdf.sh' >>~/.bashrc
@@ -21,14 +21,21 @@ install_asdf() {
 
 	echo " "
 
-	for plugin in ${ASDF_PLUGINS[@]}; do
+        OLD_IFS="$IFS"
+	for plugin_version in ${ASDF_PLUGINS[@]}; do
 		#echo "[INFO] ... Installing ASDF Plugin '$plugin'"
 
-		asdf plugin add $plugin
-		asdf install $plugin latest
-		asdf global $plugin latest
+                IFS="@"
+                read -ra tmparr <<< "$plugin_version"
+                plugin=${tmparr[0]}
+                version=${tmparr[1]}
+		
+                asdf plugin add $plugin
+                asdf install $plugin $version
+                asdf global $plugin $version
 
 		echo " "
+                IFS="$OLD_IFS"
 	done
 }
 
