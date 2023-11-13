@@ -107,13 +107,13 @@ install_packages() {
 	install_ohmyposh
 	install_asdf
 	configure_github_key
+ 
 	npm install -g aws-cdk
 
+	sleep 2s
  	configure_awsvault
-
 }
 
-clear
 
 #echo -e 'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null' >>  ~/.bashrc
 
