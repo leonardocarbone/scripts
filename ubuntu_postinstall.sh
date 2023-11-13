@@ -11,7 +11,8 @@ install_asdf() {
 
 	ASDF_VERSION="v0.13.1"
 
-	ASDF_PLUGINS=("yq@4.40.1" "jq@1.7" "terraform@1.6.3" "awscli@2.13.33" "aws-vault@7.2.0" "python@3.12.0" "ruby@3.2.2" "nodejs@19.9.0" "dotnet@7.0.403" "powershell-core@7.3.9")
+	#ASDF_PLUGINS=("yq@4.40.1" "jq@1.7" "terraform@1.6.3" "awscli@2.13.33" "aws-vault@7.2.0" "python@3.12.0" "ruby@3.2.2" "nodejs@19.9.0" "dotnet@7.0.403" "powershell-core@7.3.9")
+        ASDF_PLUGINS=("yq@4.40.1" "jq@1.7" "terraform@1.6.3" "awscli@2.13.33" "aws-vault@7.2.0" "python@3.12.0" "ruby@3.2.2" "nodejs@18.18.2" "dotnet@7.0.403" "powershell-core@7.3.9")
 
 	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch $ASDF_VERSION
 	echo -e '\n. $HOME/.asdf/asdf.sh' >>~/.bashrc
