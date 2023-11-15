@@ -2,7 +2,7 @@
 
 ###
 ### Tested Ubuntu 20.04
-### curl -sSL https://raw.githubusercontent.com/leonardocarbone/scripts/master/ubuntu_postinstall.sh | bash
+### curl -sSL https://raw.githubusercontent.com/leonardocarbone/scripts/master/ubuntu_postinstall.sh -o ubuntu_postinstall.sh && bash ubuntu_postinstall.sh
 ###
 
 install_asdf() {
@@ -11,7 +11,6 @@ install_asdf() {
 
 	ASDF_VERSION="v0.13.1"
 
-	#ASDF_PLUGINS=("yq@4.40.1" "jq@1.7" "terraform@1.6.3" "awscli@2.13.33" "aws-vault@7.2.0" "python@3.12.0" "ruby@3.2.2" "nodejs@19.9.0" "dotnet@7.0.403" "powershell-core@7.3.9")
         ASDF_PLUGINS=("yq@4.40.1" "jq@1.7" "terraform@1.6.3" "awscli@2.13.33" "aws-vault@7.2.0" "python@3.12.0" "ruby@3.2.2" "nodejs@18.18.2" "dotnet@7.0.403" "powershell-core@7.3.9")
 
 	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch $ASDF_VERSION
@@ -122,19 +121,4 @@ install_packages
 git config --global user.email "leonardoz.carbone@gmail.com"
 git config --global user.name "Leonardo Carbone"
 
-asdf list
-
-echo " "
-echo "Ruby Version........: $(ruby --version)"
-echo "Python Version......: $(python -V)"
-echo "Node Version........: $(node --version)"
-echo "DotNetCore Version..: $(dotnet --version)"
-echo "Terraform Version...: $(terraform --version)"
-echo "AWS Vault Version...: $(aws-vault --version)"
-echo "AWS CLI Version.....: $(aws --version)"
-echo "AWS CDK Version.....: $(cdk --version)"
-echo "YQ Version..........: $(yq --version)"
-echo "JQ Version..........: $(jq --version)"
-echo " "
-
-exec bash
+asdf current
