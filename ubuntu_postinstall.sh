@@ -88,6 +88,18 @@ configure_awsvault() {
 	aws-vault --backend=pass add $aws_profile_name
 }
 
+configure_git() {
+	echo " "
+
+ 	read -p "GIT Config. Press ENTER to continue"
+ 
+ 	read -p "User Email: " git_user_email
+	read -p "User Name: " git_user_name
+
+ 	git config --global user.email "$git_user_email"
+  	git config --global user.name "$git_user_name"
+}
+
 configure_github_key() {
 	echo " "
 	#read -p "Configure GitHub Key. Press ENTER to continue"
@@ -105,20 +117,15 @@ install_packages() {
 
 	install_ohmyposh
 	install_asdf
-	configure_github_key
- 
 	npm install -g aws-cdk
-
-	sleep 2s
- 	configure_awsvault
 }
 
 
 #echo -e 'echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null' >>  ~/.bashrc
 
 install_packages
-
-git config --global user.email "leonardoz.carbone@gmail.com"
-git config --global user.name "Leonardo Carbone"
+configure_git
+configure_github_key
+configure_awsvault
 
 asdf current
