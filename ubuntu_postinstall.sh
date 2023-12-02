@@ -75,7 +75,8 @@ configure_awsvault() {
 	echo -e "[profile $aws_profile_name]\nregion = $aws_region\nmfa_serial = $aws_mfa_serial\nrole_arn = $aws_role_arn" >>$CONFIG_FILE
 
 	echo -e '\nexport AWS_VAULT_BACKEND=pass' >>~/.bashrc
-	echo -e "\nalias aws-cli='aws-vault exec $aws_profile_name -- aws'" >>~/.bashrc        
+	echo -e "\nalias aws-cli='aws-vault exec $aws_profile_name -- aws'" >> ~/.bashrc 
+ 	echo -e "\nalias awslogin='aws-vault exec $aws_profile_name'" >> ~/.bashrc 
 
 	echo " "
 	gpg --full-generate-key
