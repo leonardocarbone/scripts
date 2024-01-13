@@ -114,7 +114,7 @@ configure_github_key() {
 install_packages() {
 	sudo apt update -y
 	sudo apt upgrade -y
-	sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg libbz2-dev lzma sqlite3 libreadline-dev libyaml-dev
+	sudo apt install -y tree unzip build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev zlib1g-dev libffi-dev pass gpg libbz2-dev lzma sqlite3 libreadline-dev libyaml-dev ntpdate
 
 	install_ohmyposh
 	install_asdf
@@ -128,5 +128,14 @@ install_packages
 configure_git
 configure_github_key
 configure_awsvault
+
+echo -e "\nalias upd-clock='sudo ntpdate time.windows.com'" >> ~/.bashrc
+echo -e "\nalias tfvalidate='terraform validate'" >> ~/.bashrc
+echo -e "\nalias tffmt='terraform fmt -recursive .'" >> ~/.bashrc
+echo -e "\nalias tfplan='terraform plan -out=terraform.tfplan'" >> ~/.bashrc
+echo -e "\nalias tfapply='terraform apply -auto-approve terraform.tfplan'" >> ~/.bashrc
+echo -e "\nalias tfdestroy='terraform apply -destroy'" >> ~/.bashrc
+echo -e "\nalias tftest='terraform test'" >> ~/.bashrc
+
 
 asdf current
